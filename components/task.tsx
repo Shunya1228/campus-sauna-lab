@@ -1,37 +1,85 @@
-"use client"
-import { useState, Dispatch, SetStateAction, ReactElement } from 'react';
-import EditDialog from './editDialog';
-import RemoveDialog from './removeDialog';
+
+"use client";
+import { useRouter } from "next/navigation";
+import {
+  useState,
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+  useEffect,
+} from "react";
+import { supabase } from "@/utils/supabase/supabase";
+
+function Task(props: {
+  id: number;
+  text: string;
+  saunatemperature: string;
+  fee: string;
+  access: string;
+  station: string;
+  school: string;
+  openinghours: string;
+  taskList: Dispatch<SetStateAction<Array<ReactElement>>>;
+}) {
+  const router = useRouter();
+
+  const id = props.id;
+  const text = props.text;
+  const fee = props.fee;
+  const access = props.access;
+  const station = props.station;
+  const school = props.school;
+  const openinghours = props.openinghours;
+
+  const handleClick = () => {
+    router.push(`/details/${id}`);  // ボタンをクリックして '/details' に遷移する
+  };
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  // 画像の取得
+  const fetchImage = async () => {
+    try {
+      const { data, error } = await supabase.storage
+        .from("saunaapp") //バケット名
+        .getPublicUrl(`main/${id}.jpg`); //idからメイン画像を取得
+
+      if (error) {
+        throw error;
+      }
+
+      // 公開URLを設定
+      setImageUrl(data.publicUrl);
+    } catch (error) {
+      console.error("Error fetching image:", error.message);
+    }
+  };
 
 
-export default function Task(props: { id: number, text: string, update_at: string, taskList: Dispatch<SetStateAction<Array<ReactElement>>> }) {
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-
-  const id = props.id
-  const text = props.text
-  const update_at = props.update_at
-  let last_update = new Date(update_at)
+  // コンポーネントのマウント時に画像を取得
+  useEffect(() => {
+    fetchImage();
+  }, []);
 
   return (
     <>
-      <div>
-        <p className="text-gray-600 break-all">
-          {text}
-        </p>
-        <p className="text-xs text-gray-400">最終更新日時：{last_update.toLocaleString("ja-JP")}</p>
-      </div>
-
-      <div className="flex">
-        <button type="button" className="w-9 text-blue-500 hover:text-blue-600" onClick={() => setShowEditModal(true)}>編集</button>
-        <button type="button" className="ml-2 w-9 text-red-500 hover:text-red-600" onClick={() => setShowRemoveModal(true)}>削除</button>
-      </div>
-      {showEditModal ? (
-        <EditDialog id={id} taskList={props.taskList} showModal={setShowEditModal}></EditDialog>
-      ) : null}
-      {showRemoveModal ? (
-        <RemoveDialog id={id} taskList={props.taskList} showModal={setShowRemoveModal}></RemoveDialog>
-      ) : null}
+      <button
+        onClick={handleClick}
+        className="w-full text-left p-4 border rounded-md shadow-md hover:bg-gray-100"
+      >
+        <div>
+          <p className="break-all">施設名:{text}</p>
+          <p>ID:{id}</p>
+          {imageUrl && <img src={imageUrl} alt="Image" className="m-1" />}
+          <p className="text-xs ">場所：{access}</p>
+          <p className="text-xs">最寄駅：{station}</p>
+          <p className="text-xs">営業時間：{openinghours}</p>
+          <p className="text-xs">近隣学校：{school}</p>
+          <p className="text-xs">料金：{fee}円</p>
+        </div>
+      </button>
     </>
-  )
+  );
 }
+
+export default Task;

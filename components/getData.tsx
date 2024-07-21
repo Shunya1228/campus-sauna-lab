@@ -1,28 +1,45 @@
-import { supabase } from "@/utils/supabase/supabase"
-import Task from "./task"
-import { Dispatch, SetStateAction, ReactElement } from "react"
+import { supabase } from "@/utils/supabase/supabase";
+import Task from "./Task";
+import { Dispatch, SetStateAction, ReactElement } from "react";
 
 export default async function getData(
-  taskList: Dispatch<SetStateAction<Array<ReactElement>>>
+  setTaskList: Dispatch<SetStateAction<Array<ReactElement>>>,
+  selectedUniversity: string
 ) {
-  const tmpTaskList = []
   try {
-    let { data: tasks, error } = await supabase
-      .from('tasks')
-      .select('*')
-    if (error) {
-      console.log(error)
+    // クエリを作成
+    let query = supabase.from("tasks").select("*");
+
+    // selectedUniversityが設定されている場合のみフィルタリングを適用
+    if (selectedUniversity) {
+      query = query.eq("school", selectedUniversity);
     }
 
-    if (tasks != null) {
-      for (let index = 0; index < tasks.length; index++) {
-        tmpTaskList.push(<li className="flex items-center justify-between py-2" key={tasks[index]["id"]}>
-          <Task taskList={taskList} id={tasks[index]["id"]} text={tasks[index]["text"] ?? ""} update_at={tasks[index]["update_at"] ?? ""}></Task>
-        </li>)
-      }
-      taskList(tmpTaskList)
+    const { data: tasks, error } = await query;
+
+    if (error) {
+      console.error("Error fetching tasks:", error);
+      return;
+    }
+
+    if (tasks) {
+      const tmpTaskList = tasks.map((task) => (
+        <li className="flex items-center justify-between py-2" key={task.id}>
+          <Task
+            taskList={setTaskList}
+            id={task.id}
+            text={task.text ?? ""}
+            openinghours={task.openinghours}
+            school={task.school}
+            station={task.station}
+            access={task.access}
+            saunatemperature={task.saunatemperature ?? ""}
+          />
+        </li>
+      ));
+      setTaskList(tmpTaskList);
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error:", error);
   }
 }
