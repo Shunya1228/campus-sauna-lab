@@ -5,6 +5,7 @@ import {
   EnvelopeIcon,
   KeyIcon,
   ArrowLeftOnRectangleIcon,
+  MapPinIcon
 } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -31,6 +32,11 @@ const subNavigation = [
     icon: ArrowLeftOnRectangleIcon,
     href: '/settings/logout',
   },
+  {
+    name: 'MyMap',
+    icon: MapPinIcon,
+    href: '/mymap',
+  },
 ]
 
 // レイアウト
@@ -39,13 +45,13 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="grid grid-cols-3 gap-3">
-      <div className="col-span-1 text-sm space-y-1 font-bold flex flex-col">
+      <div className="col-span-1 text-xs space-y-1 font-bold flex flex-col">
         {subNavigation.map((item, index) => (
           <Link href={item.href} key={index}>
             <div
               className={`${
                 item.href == pathname && 'bg-sky-100 text-sky-500'
-              } hover:bg-sky-100 px-3 py-2 rounded-full`}
+              } hover:bg-sky-100 px-0.5 py-2 rounded-full`}
             >
               <item.icon className="inline-block w-5 h-5 mr-2" />
               {item.name}

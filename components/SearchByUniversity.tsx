@@ -1,10 +1,11 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 import { getUniversities } from "@/components/GetUniversity";
 import FacilityList from './FacilityList';
 import { getFacility } from "@/components/GetFacility";
-import { AppProps } from 'next/app';
-import { FacilityProvider } from './FacilityContext';
+import useStore from '@/store';
 
 interface University {
   name: string;
@@ -20,26 +21,27 @@ interface Facility {
   lng: number;
 }
 
-interface SearchByUniversityProps {
-  university: string;
-}
-
-const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) => {
-  const [selectedUniversity, setSelectedUniversity] = useState(university);
-  const [coordinates, setCoordinates] = useState<{ lat: number, lng: number }>({ lat: 0, lng: 0 }); // 初期値を仮の値に設定
+const SearchByUniversity: React.FC = () => {
+  const { selectedUniversity, setSelectedUniversity } = useStore();
   const [universities, setUniversities] = useState<University[]>([]);
+  const [coordinates, setCoordinates] = useState<{ lat: number, lng: number }>({ lat: 0, lng: 0 });
   const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>(undefined);
 
   useEffect(() => {
     const fetchUniversities = async () => {
       const universityList = await getUniversities();
       setUniversities(universityList);
 
-      const initialUniversity = universityList.find(univ => univ.name === university);
-      if (initialUniversity) {
-        setCoordinates({ lat: initialUniversity.lat, lng: initialUniversity.lng });
+      if (selectedUniversity) {
+        const initialUniversity = universityList.find(univ => univ.name === selectedUniversity);
+        if (initialUniversity) {
+          setCoordinates({ lat: initialUniversity.lat, lng: initialUniversity.lng });
+        } else {
+          handleCurrentLocation();
+        }
       } else {
-        handleCurrentLocation(); // 初期の大学が見つからない場合、現在地を使用する
+        handleCurrentLocation();
       }
 
       const facilitiesData = await getFacility();
@@ -47,14 +49,15 @@ const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) =
     };
 
     fetchUniversities();
-  }, [university]);
+  }, [selectedUniversity]);
 
   const handleUniversityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = universities.find(univ => univ.name === event.target.value);
-    if (selected) {
-      setSelectedUniversity(selected.name);
-      setCoordinates({ lat: selected.lat, lng: selected.lng });
+    const selectedUniversityName = event.target.value;
+    const universitySelector = universities.find(univ => univ.name === selectedUniversityName);
 
+    if (universitySelector) {
+      setSelectedUniversity(universitySelector.name);
+      setCoordinates({ lat: universitySelector.lat, lng: universitySelector.lng });
       getFacility().then(facilitiesData => {
         setFacilities(facilitiesData);
       });
@@ -63,40 +66,45 @@ const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) =
 
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        setCoordinates({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setSelectedUniversity('');
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setCoordinates({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
 
-        getFacility().then(facilitiesData => {
-          setFacilities(facilitiesData);
-        });
-      });
+          setSelectedUniversity('');
+
+          getFacility().then(facilitiesData => {
+            setFacilities(facilitiesData);
+          });
+        },
+        error => {
+          console.error("Error getting current location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
     }
   };
+
+  const handleMarkerClick = (facilityId: number) => {
+    const facility = facilities.find(fac => fac.id === facilityId);
+    if (facility) {
+      setSelectedFacility(facility); // クリックしたマーカーの施設を選択状態にする
+    }
+  };
+
 
   const mapContainerStyle = {
     width: '100%',
     height: '400px',
   };
 
-  const center = {
+  const center = coordinates.lat && coordinates.lng ? {
     lat: coordinates.lat,
     lng: coordinates.lng,
-  };
-
-  const handleMarkerClick = (facilityId: number) => {
-    // マーカーがクリックされたときの処理
-    console.log(`Marker clicked: Facility ID ${facilityId}`);
-  
-    // 全ての施設を保持したまま、クリックされた施設のみをフィルタリングする
-    const filteredFacilities = facilities.filter(facility => facility.id === facilityId);
-  
-    // フィルタリングされた施設リストを状態として更新する
-    setFacilities(filteredFacilities);
-  };
+  } : { lat: 0, lng: 0 };
 
   return (
     <div className="px-4 py-3">
@@ -108,7 +116,7 @@ const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) =
           現在地
         </button>
         <select
-          value={selectedUniversity}
+          value={selectedUniversity || ''}
           onChange={handleUniversityChange}
           className="form-select py-2 px-4 rounded-lg border border-gray-300"
         >
@@ -129,28 +137,17 @@ const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) =
           zoom={14}
           className="rounded-lg shadow-md"
         >
-          {/* 現在地のマーカー */}
-          {selectedUniversity ? (
-            <Marker
-              position={center}
-              icon={{
-                url: "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg", // 大学のアイコン
-                scaledSize: { width: 40, height: 40 },
-                optimized: false
-              }}
-            />
-          ) : (
-            <Marker
-              position={center}
-              icon={{
-                url: "http://maps.google.com/mapfiles/ms/micons/man.png", //人型アイコン
-                scaledSize: { width: 40, height: 40 },
-                optimized: false
-              }}
-            />
-          )}
+          <Marker
+            position={center}
+            icon={{
+              url: selectedUniversity
+                ? "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg"
+                : "http://maps.google.com/mapfiles/ms/micons/man.png",
+              scaledSize: { width: 40, height: 40 },
+              optimized: false
+            }}
+          />
 
-          {/* 施設のマーカー */}
           {facilities.map((facility) => (
             <Marker
               key={facility.id}
@@ -160,16 +157,13 @@ const SearchByUniversity: React.FC<SearchByUniversityProps> = ({ university }) =
                 scaledSize: { width: 40, height: 40 },
                 optimized: false
               }}
-              onClick={() => handleMarkerClick(facility.id)} // マーカーがクリックされた際にコールバック関数を呼び出す
+              onClick={() => handleMarkerClick(facility.id)}
             />
           ))}
         </GoogleMap>
       </LoadScript>
 
-      <FacilityList
-        facilities={facilities}
-        onMarkerClick={handleMarkerClick} // FacilityListContainer にコールバック関数を渡す
-      />
+      <FacilityList selectedFacility={selectedFacility} center={center} />
     </div>
   );
 };

@@ -4,14 +4,12 @@ import { supabase } from "@/utils/supabase/supabase";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import UniversityModal from './UniversityModal';
-import SearchByUniversity from './SearchByUniversity';
-import Map from './Map'; 
+import useStore from '@/store'; 
 
 const TopMainVisual = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUniversity, setSelectedUniversity] = useState<string | null>(null);
-  const [showMap, setShowMap] = useState(false); // 状態遷移の追加
+  const { setSelectedUniversity } = useStore();
 
   // 画像の取得
   const fetchImage = async () => {
@@ -46,26 +44,13 @@ const TopMainVisual = () => {
     setIsModalOpen(false);
   };
 
-  // 大学名を選択したときのハンドラー
-  const handleSearchByUniversity = (university: string) => {
-    setSelectedUniversity(university);
-    setIsModalOpen(false);
+  // 現在地から探すボタンのハンドラー
+  const handleFindFromCurrentLocation = () => {
+    setSelectedUniversity(''); // Zustandの状態を空にする
   };
-
-  // 現在地から探すボタンをクリックしたときのハンドラー
-  const handleSearchNearby = () => {
-    setShowMap(true); // Mapを表示する状態に設定
-  };
-
-  if (selectedUniversity) {
-    return <SearchByUniversity university={selectedUniversity} />;
-  }
 
   return (
     <div className="relative h-full">
-      {showMap ? (
-        <SearchByUniversity /> // showMapがtrueの場合にMapコンポーネントを表示
-      ) : (
         <>
           {imageUrl ? (
             <img src={imageUrl} alt="Image" className="w-full h-screen object-cover" />
@@ -78,24 +63,25 @@ const TopMainVisual = () => {
             </h1>
             <h2 className="text-white text-xl sm:text-2xl font-bold mb-4">大学生のためのサウナ検索サイト</h2>
             <div className="bg-white bg-opacity-0 p-4 sm:p-8 rounded-lg shadow-lg">
+            <Link href="/map">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 sm:py-4 sm:px-8 rounded-lg mr-2 sm:mr-4 mb-2 sm:mb-0"
-                onClick={handleSearchNearby} // 現在地から探すボタンのクリックハンドラーを設定
+                onClick={handleFindFromCurrentLocation}
               >
                 現在地から探す
               </button>
+              </Link>
               <button
                 className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 sm:py-4 sm:px-8 rounded-lg"
                 onClick={handleOpenModal} // モーダルを開く
               >
                 大学周辺で探す
               </button>
-            </div>
+              </div>
           </div>
           {/* モーダルの表示 */}
-          <UniversityModal isOpen={isModalOpen} onClose={handleCloseModal} onSearch={handleSearchByUniversity} />
+          <UniversityModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </>
-      )}
     </div>
   );
 }

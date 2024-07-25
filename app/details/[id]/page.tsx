@@ -2,11 +2,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../utils/supabase/supabase";
 import { useParams } from "next/navigation";
+import { addFavoriteFacility } from "../../../components/addFavoriteFacility";
+import useStore from '@/store';
 
 export default function Details() {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { user } = useStore();
 
   const { id } = useParams(); // useParamsを使ってidを取得
   console.log("result of useParams:", id); // デバッグ用
@@ -43,16 +46,29 @@ export default function Details() {
         setLoading(false);
       }
     }
-
+    
     fetchTask();
   }, [id]);
 
+  const handleAddFavorite = async () => {
+    if (userId && id) {
+      const success = await addFavoriteFacility(userId, id);
+      if (success) {
+        alert("お気に入り登録が完了しました!");
+      } else {
+        alert("お気に入り登録に失敗しました。");
+      }
+    } else {
+      alert("ログインをしてから実行してください。");
+    }
+  };
+
   if (loading) {
-    return <p className="text-center text-lg text-gray-600">Loading...</p>;
+    return <p className="text-center text-lg text-gray-600">読み込み中...</p>;
   }
 
   if (!task) {
-    return <p className="text-center text-lg text-red-600">No task found.</p>;
+    return <p className="text-center text-lg text-red-600">施設が見つかりませんでした。</p>;
   }
 
   return (
@@ -72,6 +88,12 @@ export default function Details() {
             <li><strong>詳細:</strong> {task.details}</li>
             <li><strong>公式HP:</strong> <a href={task.HP} className="text-blue-600 hover:underline">{task.HP}</a></li>
           </ul>
+          <button
+            onClick={handleAddFavorite}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            お気に入り登録
+          </button>
         </div>
       </div>
     </div>

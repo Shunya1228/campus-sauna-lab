@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUniversities } from "@/components/GetUniversity";
+import { useRouter } from "next/navigation";
+import useStore from '@/store' 
 
 interface UniversityModalProps {
   isOpen: boolean;
@@ -8,8 +10,9 @@ interface UniversityModalProps {
 }
 
 const UniversityModal: React.FC<UniversityModalProps> = ({ isOpen, onClose, onSearch }) => {
-  const [selectedUniversity, setSelectedUniversity] = useState<string>('');
   const [universities, setUniversities] = useState<string[]>([]);
+  const { selectedUniversity, setSelectedUniversity } = useStore()
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -25,12 +28,10 @@ const UniversityModal: React.FC<UniversityModalProps> = ({ isOpen, onClose, onSe
   if (!isOpen) return null;
 
   const handleSearch = () => {
-    if (selectedUniversity) {
-      onSearch(selectedUniversity);
-    } else {
-      alert('大学を選択してください。');
-    }
+    router.push('/map');
   };
+
+  console.log({selectedUniversity})
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">

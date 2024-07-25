@@ -1,5 +1,6 @@
 import './globals.css'
 import Top from "../components/Top";
+import { UniversityProvider } from "../components/UniversityContext";
 
 export default async function Index() {
 
