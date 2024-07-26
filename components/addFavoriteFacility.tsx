@@ -1,6 +1,13 @@
-export async function addFavoriteFacility(userId: string, facilityId: string) {
+import { supabase } from "@/utils/supabase/supabase";
+
+interface AddFavoriteFacilityResponse {
+  success: boolean;
+  message: string;
+}
+
+export async function addFavoriteFacility(userId: string, facilityId: string): Promise<AddFavoriteFacilityResponse> {
   try {
-    // 現在のユーザーのプロフィールを取得
+    // ユーザーのfavorite_facilitiesを取得
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('favorite_facilities')
@@ -8,30 +15,39 @@ export async function addFavoriteFacility(userId: string, facilityId: string) {
       .single();
 
     if (profileError || !profileData) {
-      throw profileError;
+      throw profileError || new Error("プロフィールデータが見つかりません。");
     }
 
-    const favoriteFacilities = profileData.favorite_facilities || [];
+    //
+    const favoriteFacilities = profileData.favorite_facilities || [];;
+
+      //デバック用
+    console.log(favoriteFacilities);
+    console.log(facilityId);
+    console.log(favoriteFacilities.includes(facilityId));
+
+    //facilityIdをnumber型に変換
+    const facilityIdNumber =  Number(facilityId);
 
     // すでにお気に入りに登録されているか確認
-    if (!favoriteFacilities.includes(facilityId)) {
-      favoriteFacilities.push(facilityId);
+    if (!favoriteFacilities.includes(facilityIdNumber)) {
+      favoriteFacilities.push(facilityIdNumber);
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ favorite_facilities: favoriteFacilities })
+        .eq('id', userId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      return { success: true, message: "お気に入りに登録されました。" };
+    } else {
+      return { success: false, message: "すでにお気に入りに登録されています。" };
     }
-
-    // プロフィールのfavorite_facilitiesを更新
-    const { error: updateError } = await supabase
-      .from('profiles')
-      .update({ favorite_facilities: favoriteFacilities })
-      .eq('id', userId);
-
-    if (updateError) {
-      throw updateError;
-    }
-
-    return true;
   } catch (error) {
     console.error("Error adding favorite facility:", error.message);
-    return false;
+    return { success: false, message: "お気に入り登録に失敗しました。" };
   }
 }
 

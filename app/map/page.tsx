@@ -1,6 +1,5 @@
 import React from "react";
 import SearchByUniversity from "../../components/SearchByUniversity";
-import { UniversityProvider } from "../../components/UniversityContext";
 
 interface MappageProps {
   university?: string;

@@ -24,7 +24,7 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
   selectedFacility,
   center,
 }) => {
-  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [imageUrls, setImageUrls] = useState<{ [key: number]: string }>({});
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const router = useRouter();
 
@@ -34,7 +34,6 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
     const fetchFacilities = async () => {
       try {
         const facilitiesData = await getFacility(); //getFacilityから施設データを取得
-        setFacilities(facilitiesData);
 
         // selectedFacilityが空の場合、半径〇〇km以内の施設のみをフィルタリング
         if (!selectedFacility && center) {
@@ -48,6 +47,26 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
         } else {
           setFacilities(facilitiesData);
         }
+
+        // 各施設の画像URLを取得
+        const imageUrls = await Promise.all(
+          facilitiesData.map(async (facility) => {
+            const { data, error } = await supabase.storage
+              .from("saunaapp") // バケット名
+              .getPublicUrl(`main/${facility.id}.jpg`); // メイン画像のパス
+
+            if (error) {
+              console.error(
+                `Error fetching image for facility ${facility.id}:`,
+                error.message
+              );
+              return { [facility.id]: "" };
+            } else {
+              return { [facility.id]: data.publicUrl || "" };
+            }
+          })
+        );
+        setImageUrls(Object.assign({}, ...imageUrls));
       } catch (error) {
         console.error("Error fetching facilities:", error);
       }
@@ -71,7 +90,10 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
               error.message
             );
           } else {
-            setImageUrl(data.publicUrl || "");
+            setImageUrls((prevState) => ({
+              ...prevState,
+              [selectedFacility.id]: data.publicUrl || "",
+            }));
           }
         } catch (error) {
           console.error("Error fetching image:", error);
@@ -82,20 +104,22 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
     fetchImageUrl();
   }, [selectedFacility]);
 
-  const handleClick = () => {
+  const handleClick = (facilityId: number) => {
     if (selectedFacility) {
       router.push(`/details/${selectedFacility.id}`);
+    } else {
+      router.push(`/details/${facilityId}`);
     }
   };
 
   return (
     <div className="mt-4">
-       {/* 施設が選択されているとき */}
+      {/* 施設が選択されているとき */}
       {selectedFacility && (
         <div className="py-2 flex items-center justify-center">
-          {imageUrl && (
+          {imageUrls[selectedFacility.id] && (
             <img
-              src={imageUrl}
+              src={imageUrls[selectedFacility.id]}
               alt={`${selectedFacility?.name || "施設"}の画像`}
               className="w-16 h-16 object-cover rounded-full mr-4"
             />
@@ -115,22 +139,29 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
         </div>
       )}
 
-       {/* 施設が選択されていないとき */}
+      {/* 施設が選択されていないとき */}
       {!selectedFacility && (
         <ul className="divide-y divide-gray-200">
-        {facilities.map((facility) => (
-          <li key={facility.id} className="py-2 flex items-center justify-center">
-            <div className="flex-grow">
-              <button className="text-left block cursor-pointer" onClick={() => handleClick(facility.id)}>
-                <div className="text-sm">{facility.name}</div>
-                <div className="text-xs text-gray-500">
-                  料金: {facility.fee}円 | 営業時間: {facility.openinghours}
-                </div>
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+          {facilities.map((facility) => (
+            <li key={facility.id} className="py-2 flex items-center justify-center">
+              {imageUrls[facility.id] && (
+                <img
+                  src={imageUrls[facility.id]}
+                  alt={`${facility.name}の画像`}
+                  className="w-16 h-16 object-cover rounded-full mr-4"
+                />
+              )}
+              <div className="flex-grow">
+                <button className="text-left block cursor-pointer" onClick={() => handleClick(facility.id)}>
+                  <div className="text-sm">{facility.name}</div>
+                  <div className="text-xs text-gray-500">
+                    料金: {facility.fee}円 | 営業時間: {facility.openinghours}
+                  </div>
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

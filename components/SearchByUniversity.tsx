@@ -28,6 +28,9 @@ const SearchByUniversity: React.FC = () => {
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>(undefined);
 
+
+  console.log("テスト");
+  
   useEffect(() => {
     const fetchUniversities = async () => {
       const universityList = await getUniversities();

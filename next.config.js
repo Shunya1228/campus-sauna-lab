@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     domains: ['rofjidbzyhtybpyqkfle.supabase.co'],
   },
+  reactStrictMode: false,
 }
 
 module.exports = nextConfig
