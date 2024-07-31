@@ -1,5 +1,5 @@
 <a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <h1 align="center">Campus Sauna Lab ~大学生のためのサウナ検索アプリケーション</h1>
+  <h1 align="center">Campus Sauna Lab <br>~大学生のためのサウナ検索アプリケーション</br>~</h1>
 </a>
 
 <p align="center">
