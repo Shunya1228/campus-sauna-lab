@@ -7,27 +7,9 @@
 </p>
 
 <h2>アプリケーションを作成した経緯</h2>
+<ul>
+<li>時間に余裕のある大学生の期間により多くのサウナ施設を訪れて欲しいと考えたため</li>
+<li>お気に入りの施設を登録し、施設を地図上にコレクションできるサービスがないため</li>
+<li>お気に入り登録した施設を友人と共有しあって、学生内のサウナコミュニティの構築に役立てて欲しいと考えたため</li>
+</ul>
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
-
-##
-
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
