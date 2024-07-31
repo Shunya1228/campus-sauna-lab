@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
-import MyMap from "../../components/mymap";
+import MyMap from "../../components/mymap/mymap";
 
 import type { Database } from "@/types/supabasetype";
 

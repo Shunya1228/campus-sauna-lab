@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/navigation'
-import Password from '../../../components/password'
+import Password from '../../../components/settings/password'
 import type { Database } from '@/types/supabasetype'
 
 // パスワード変更ページ

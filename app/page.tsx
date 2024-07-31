@@ -1,14 +1,12 @@
-import './globals.css'
-import Top from "../components/Top";
-import { UniversityProvider } from "../components/UniversityContext";
+import "./globals.css";
+import Top from "../components/top/Top";
 
 export default async function Index() {
-
   return (
     <div>
-        <main className="flex-grow">
+      <main className="flex-grow">
         <Top />
-        </main>
+      </main>
     </div>
-  )
+  );
 }

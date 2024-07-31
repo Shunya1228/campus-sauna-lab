@@ -2,7 +2,6 @@ import "./globals.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import SupabaseListener from '../components/supabase-listener'
-import { UniversityProvider } from '../components/UniversityContext';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -29,13 +28,11 @@ export default function RootLayout({
         <title>{metadata.title}</title>
       </head>
       <body className="flex flex-col min-h-screen bg-background text-foreground">
-      <UniversityProvider>
       <SupabaseListener />
           <main className="flex-grow">
             {children}
             <Footer />
           </main>
-      </UniversityProvider>
         </body>
     </html>
   );

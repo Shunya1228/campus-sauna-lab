@@ -1,5 +1,5 @@
 import React from "react";
-import SearchByUniversity from "../../components/SearchByUniversity";
+import SearchByUniversity from "../../components/map/SearchByUniversity";
 
 interface MappageProps {
   university?: string;

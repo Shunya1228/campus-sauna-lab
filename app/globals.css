@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .star {
+    @apply w-[80px] h-[50px] bg-no-repeat cursor-pointer;
+    background-image: url('https://nelog.jp/wp-content/uploads/2016/03/star_animation.png');
+    background-position: 0 0;
+  }
+
+  .star:hover {
+    background-position: -3519px 0;
+    -webkit-transition: background 1s steps(55);
+    transition: background 1s steps(55);
+  }
+}

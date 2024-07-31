@@ -41,9 +41,9 @@ export async function addFavoriteFacility(userId: string, facilityId: string): P
         throw updateError;
       }
 
-      return { success: true, message: "お気に入りに登録されました。" };
+      return { success: true, message: "お気に入り登録が完了しました！" };
     } else {
-      return { success: false, message: "すでにお気に入りに登録されています。" };
+      return { success: false, message: "既にお気に入りに登録されています。" };
     }
   } catch (error) {
     console.error("Error adding favorite facility:", error.message);

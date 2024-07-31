@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
+import React, { useEffect, useState } from "react";
+import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 import { getUniversities } from "@/components/GetUniversity";
-import FacilityList from './FacilityList';
+import FacilityList from "../FacilityList";
 import { getFacility } from "@/components/GetFacility";
-import useStore from '@/store';
+import useStore from "@/store";
 
 interface University {
   name: string;
@@ -24,22 +24,31 @@ interface Facility {
 const SearchByUniversity: React.FC = () => {
   const { selectedUniversity, setSelectedUniversity } = useStore();
   const [universities, setUniversities] = useState<University[]>([]);
-  const [coordinates, setCoordinates] = useState<{ lat: number, lng: number }>({ lat: 0, lng: 0 });
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number }>({
+    lat: 0,
+    lng: 0,
+  });
   const [facilities, setFacilities] = useState<Facility[]>([]);
-  const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>(undefined);
-
+  const [selectedFacility, setSelectedFacility] = useState<
+    Facility | undefined
+  >(undefined);
 
   console.log("テスト");
-  
+
   useEffect(() => {
     const fetchUniversities = async () => {
       const universityList = await getUniversities();
       setUniversities(universityList);
 
       if (selectedUniversity) {
-        const initialUniversity = universityList.find(univ => univ.name === selectedUniversity);
+        const initialUniversity = universityList.find(
+          (univ) => univ.name === selectedUniversity
+        );
         if (initialUniversity) {
-          setCoordinates({ lat: initialUniversity.lat, lng: initialUniversity.lng });
+          setCoordinates({
+            lat: initialUniversity.lat,
+            lng: initialUniversity.lng,
+          });
         } else {
           handleCurrentLocation();
         }
@@ -54,14 +63,21 @@ const SearchByUniversity: React.FC = () => {
     fetchUniversities();
   }, [selectedUniversity]);
 
-  const handleUniversityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleUniversityChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const selectedUniversityName = event.target.value;
-    const universitySelector = universities.find(univ => univ.name === selectedUniversityName);
+    const universitySelector = universities.find(
+      (univ) => univ.name === selectedUniversityName
+    );
 
     if (universitySelector) {
       setSelectedUniversity(universitySelector.name);
-      setCoordinates({ lat: universitySelector.lat, lng: universitySelector.lng });
-      getFacility().then(facilitiesData => {
+      setCoordinates({
+        lat: universitySelector.lat,
+        lng: universitySelector.lng,
+      });
+      getFacility().then((facilitiesData) => {
         setFacilities(facilitiesData);
       });
     }
@@ -70,19 +86,19 @@ const SearchByUniversity: React.FC = () => {
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        position => {
+        (position) => {
           setCoordinates({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
 
-          setSelectedUniversity('');
+          setSelectedUniversity("");
 
-          getFacility().then(facilitiesData => {
+          getFacility().then((facilitiesData) => {
             setFacilities(facilitiesData);
           });
         },
-        error => {
+        (error) => {
           console.error("Error getting current location:", error);
         }
       );
@@ -92,22 +108,24 @@ const SearchByUniversity: React.FC = () => {
   };
 
   const handleMarkerClick = (facilityId: number) => {
-    const facility = facilities.find(fac => fac.id === facilityId);
+    const facility = facilities.find((fac) => fac.id === facilityId);
     if (facility) {
       setSelectedFacility(facility); // クリックしたマーカーの施設を選択状態にする
     }
   };
 
-
   const mapContainerStyle = {
-    width: '100%',
-    height: '400px',
+    width: "100%",
+    height: "400px",
   };
 
-  const center = coordinates.lat && coordinates.lng ? {
-    lat: coordinates.lat,
-    lng: coordinates.lng,
-  } : { lat: 0, lng: 0 };
+  const center =
+    coordinates.lat && coordinates.lng
+      ? {
+          lat: coordinates.lat,
+          lng: coordinates.lng,
+        }
+      : { lat: 0, lng: 0 };
 
   return (
     <div className="px-4 py-3">
@@ -119,12 +137,12 @@ const SearchByUniversity: React.FC = () => {
           現在地
         </button>
         <select
-          value={selectedUniversity || ''}
+          value={selectedUniversity || ""}
           onChange={handleUniversityChange}
           className="form-select py-2 px-4 rounded-lg border border-gray-300"
         >
           <option value="">大学を選択</option>
-          {universities.map(univ => (
+          {universities.map((univ) => (
             <option key={univ.name} value={univ.name}>
               {univ.name}
             </option>
@@ -147,7 +165,7 @@ const SearchByUniversity: React.FC = () => {
                 ? "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg"
                 : "http://maps.google.com/mapfiles/ms/micons/man.png",
               scaledSize: { width: 40, height: 40 },
-              optimized: false
+              optimized: false,
             }}
           />
 
@@ -158,7 +176,7 @@ const SearchByUniversity: React.FC = () => {
               icon={{
                 url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                 scaledSize: { width: 40, height: 40 },
-                optimized: false
+                optimized: false,
               }}
               onClick={() => handleMarkerClick(facility.id)}
             />

@@ -6,20 +6,19 @@ import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import Loading from './Loading'
+import Loading from '../Loading'
 import * as z from 'zod'
 import type { Database } from '@/types/supabasetype'
 type Schema = z.infer<typeof schema>
 
 // 入力データの検証ルールを定義
 const schema = z.object({
-  name: z.string().min(2, { message: '2文字以上入力する必要があります。' }),
   email: z.string().email({ message: 'メールアドレスの形式ではありません。' }),
   password: z.string().min(6, { message: '6文字以上入力する必要があります。' }),
 })
 
-// サインアップページ
-const Signup = () => {
+// ログインページ
+const Login = () => {
   const router = useRouter()
   const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(false)
@@ -29,10 +28,9 @@ const Signup = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     // 初期値
-    defaultValues: { name: '', email: '', password: '' },
+    defaultValues: { email: '', password: '' },
     // 入力値の検証
     resolver: zodResolver(schema),
   })
@@ -42,38 +40,20 @@ const Signup = () => {
     setLoading(true)
 
     try {
-      // サインアップ
-      const { error: errorSignup } = await supabase.auth.signUp({
+      // ログイン
+      const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
-        options: {
-          emailRedirectTo: `${location.origin}/auth/callback`,
-        },
       })
 
       // エラーチェック
-      if (errorSignup) {
-        setMessage('エラーが発生しました。' + errorSignup.message)
+      if (error) {
+        setMessage('エラーが発生しました。' + error.message)
         return
       }
 
-      // プロフィールの名前を更新
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ name: data.name })
-        .eq('email', data.email)
-
-      // エラーチェック
-      if (updateError) {
-        setMessage('エラーが発生しました。' + updateError.message)
-        return
-      }
-
-      // 入力フォームクリア
-      reset()
-      setMessage(
-        '本登録用のURLを記載したメールを送信しました。メールをご確認の上、メール本文中のURLをクリックして、本登録を行ってください。'
-      )
+      // トップページに遷移
+      router.push('/')
     } catch (error) {
       setMessage('エラーが発生しました。' + error)
       return
@@ -85,20 +65,8 @@ const Signup = () => {
 
   return (
     <div className="max-w-[400px] mx-auto">
-      <div className="text-center font-bold text-xl mb-10">サインアップ</div>
+      <div className="text-center font-bold text-xl mb-10">ログイン</div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* 名前 */}
-        <div className="mb-3">
-          <input
-            type="text"
-            className="border rounded-md w-full py-2 px-3 focus:outline-none focus:border-sky-500"
-            placeholder="名前"
-            id="name"
-            {...register('name', { required: true })}
-          />
-          <div className="my-3 text-center text-sm text-red-500">{errors.name?.message}</div>
-        </div>
-
         {/* メールアドレス */}
         <div className="mb-3">
           <input
@@ -123,7 +91,7 @@ const Signup = () => {
           <div className="my-3 text-center text-sm text-red-500">{errors.password?.message}</div>
         </div>
 
-        {/* サインアップボタン */}
+        {/* ログインボタン */}
         <div className="mb-5">
           {loading ? (
             <Loading />
@@ -132,7 +100,7 @@ const Signup = () => {
               type="submit"
               className="font-bold bg-sky-500 hover:brightness-95 w-full rounded-full p-2 text-white text-sm"
             >
-              サインアップ
+              ログイン
             </button>
           )}
         </div>
@@ -140,13 +108,19 @@ const Signup = () => {
 
       {message && <div className="my-5 text-center text-sm text-red-500">{message}</div>}
 
+      <div className="text-center text-sm mb-5">
+        <Link href="/auth/reset-password" className="text-gray-500 font-bold">
+          パスワードを忘れた方はこちら
+        </Link>
+      </div>
+
       <div className="text-center text-sm">
-        <Link href="/auth/login" className="text-gray-500 font-bold">
-          ログインはこちら
+        <Link href="/auth/signup" className="text-gray-500 font-bold">
+          アカウントを作成する
         </Link>
       </div>
     </div>
   )
 }
 
-export default Signup
+export default Login

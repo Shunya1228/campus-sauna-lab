@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/navigation'
-import Signup from '../../../components/Signup'
+import Signup from '../../../components/auth/Signup'
 import type { Database } from '@/types/supabasetype'
 
 // サインアップページ

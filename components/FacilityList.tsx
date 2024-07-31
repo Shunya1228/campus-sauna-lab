@@ -35,13 +35,13 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
       try {
         const facilitiesData = await getFacility(); //getFacilityから施設データを取得
 
-        // selectedFacilityが空の場合、半径〇〇km以内の施設のみをフィルタリング
+        // selectedFacilityが空の場合、半径10km以内の施設のみをフィルタリング
         if (!selectedFacility && center) {
           const filteredFacilities = facilitiesData.filter((facility) =>
             getDistance(
               { latitude: center.lat, longitude: center.lng },
               { latitude: facility.lat, longitude: facility.lng }
-            ) <= 15000 // 15kmは15000m
+            ) <= 10000 // 10kmは10000m
           );
           setFacilities(filteredFacilities);
         } else {
