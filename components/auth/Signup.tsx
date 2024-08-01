@@ -18,6 +18,7 @@ const schema = z.object({
   password: z.string().min(6, { message: '6文字以上入力する必要があります。' }),
 })
 
+
 // サインアップページ
 const Signup = () => {
   const router = useRouter()
@@ -30,7 +31,7 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<Schema>({
     // 初期値
     defaultValues: { name: '', email: '', password: '' },
     // 入力値の検証

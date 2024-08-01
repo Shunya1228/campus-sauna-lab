@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
-import useFavoriteFacilities from "../GetFavoriteFacilities";
+import useFavoriteFacilities from "../favoriteFacility/GetFavoriteFacilities";
 import { useRouter } from "next/navigation";
 
 interface FavoriteFacilitiesMapProps {

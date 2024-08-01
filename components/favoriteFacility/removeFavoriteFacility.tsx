@@ -40,8 +40,15 @@ export async function removeFavoriteFacility(userId: string, facilityId: string)
       return { success: false, message: "お気に入りに登録されていません。" };
     }
   } catch (error) {
-    console.error("Error removing favorite facility:", error.message);
-    return { success: false, message: "お気に入り解除に失敗しました。" };
+    // エラーが Error 型かどうかをチェック
+    if (error instanceof Error) {
+      console.error("Error removing favorite facility:", error.message);
+      return { success: false, message: "お気に入り解除に失敗しました。" };
+    } else {
+      // 型が不明な場合のデフォルトのエラーメッセージ
+      console.error("Unexpected error removing favorite facility:", error);
+      return { success: false, message: "お気に入り解除に失敗しました。" };
+    }
   }
 }
 

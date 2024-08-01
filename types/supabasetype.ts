@@ -13,20 +13,39 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
-          text: string | null;
+          name: string | null;
+          saunatemperature: string; 
+          access: string;
+          fee: string;
+          details: string;
+          watertemperature: string;
+          HP: string;
+          openinghours: string;
+          longitude: number;
+          latitude: number;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          text?: string | null;
+          name?: string | null;
         };
         Update: {
           created_at?: string;
           id?: number;
-          text?: string | null;
+          name?: string | null;
         };
         Relationships: [];
       };
+      profiles: {
+        Row: {
+          id: string;
+          email: string;
+          name: string;
+          introduce: string;
+          avatar_url: string;
+          favorite_facilities:string;
+        }
+      }
     };
     Views: {
       [_ in never]: never;

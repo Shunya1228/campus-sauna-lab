@@ -4,17 +4,18 @@ import { supabase } from "@/utils/supabase/supabase";
 import { addFavoriteFacility } from "../favoriteFacility/addFavoriteFacility";
 import useStore from "@/store";
 import { removeFavoriteFacility } from "../favoriteFacility/removeFavoriteFacility";
+import { Tables } from "@/types/supabasetype";
 
 interface FacilityDetailsProps {
   id: string;
 }
 
 const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
-  const [task, setTask] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [task, setTask] = useState<Tables<'tasks'> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { user } = useStore();
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchTask() {
@@ -32,18 +33,14 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
         setTask(data);
 
         // タスクが取得された後に画像を取得
-        const { data: imageData, error: imageError } = await supabase.storage
+        const { data: imageData} = await supabase.storage //getPublicUrl メソッドの戻り値に error プロパティが存在しない
           .from("saunaapp") // バケット名
           .getPublicUrl(`main/${id}.jpg`); // idからメイン画像を取得
-
-        if (imageError) {
-          throw imageError;
-        }
 
         // 公開URLを設定
         setImageUrl(imageData.publicUrl);
       } catch (error) {
-        console.error("Error fetching task or image:", error.message);
+        console.error('Error fetching task or image:', (error as Error).message); //error を Error 型にキャストし、message プロパティにアクセス
       } finally {
         setLoading(false);
       }
@@ -153,8 +150,6 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 
           <div className="flex items-center justify-center">
             <button
-              variant="ghost"
-              size="icon"
               onClick={handleClick}
               className={`
         rounded-full
@@ -164,6 +159,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
         hover:scale-125
         ${isFavorited ? "bg-red-500 text-white" : "bg-white text-red-500"}
         text-center
+        border
       `}
             >
               <HeartIcon className="h-7 w-7" />
@@ -180,7 +176,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 
 export default FacilityDetails;
 
-function HeartIcon(props) {
+function HeartIcon(props: React.SVGProps<SVGSVGElement>)  {
   return (
     <svg
       {...props}

@@ -51,9 +51,17 @@ export async function addFavoriteFacility(userId: string, facilityId: string): P
       return { success: false, message: "既にお気に入りに登録されています。" };
     }
   } catch (error) {
-    console.error("Error adding favorite facility:", error.message);
-    return { success: false, message: "お気に入り登録に失敗しました。" };
+
+    //TypeScript で 'error' が unknown 型であるというエラーが発生する場合、catch ブロックで error の型が unknown であるため
+    // エラーが Error 型かどうかをチェック
+    if (error instanceof Error) {
+      console.error("Error adding favorite facility:", error.message);
+      return { success: false, message: "お気に入り登録に失敗しました。" };
+    } else {
+      // 型が不明な場合のデフォルトのエラーメッセージ
+      console.error("Unexpected error adding favorite facility:", error);
+      return { success: false, message: "お気に入り登録に失敗しました。" };
+    }
   }
 }
-
 export default addFavoriteFacility;
