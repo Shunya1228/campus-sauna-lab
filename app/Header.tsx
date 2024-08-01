@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import HotTubIcon from '@mui/icons-material/HotTub';
-import HamburgerMenu from '@/components/HamburgerMenu';
 import Drawer from '@mui/material/Drawer';
 
 const Header = () => {
@@ -28,7 +27,6 @@ const Header = () => {
           onKeyDown={() => handleDrawerToggle(false)}
           role="presentation"
         >
-          <HamburgerMenu />
         </div>
       </Drawer>
       <div className="flex items-center justify-center flex-grow p-2">

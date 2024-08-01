@@ -1,5 +1,4 @@
 import "./globals.css";
-import Header from "./Header";
 import Footer from "./Footer";
 import SupabaseListener from '../components/supabase-listener'
 
