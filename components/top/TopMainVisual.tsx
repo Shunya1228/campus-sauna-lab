@@ -61,11 +61,11 @@ const TopMainVisual = () => {
         ) : (
           <p>Loading...</p>
         )}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-4">
-          <h1 className="text-white text-4xl sm:text-5xl font-bold mb-2 sm:mb-4">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-2">
+          <h1 className="text-white text-4xl sm:text-5xl font-bold ">
             Campus Sauna Lab
           </h1>
-          <h2 className="text-white text-xl sm:text-2xl font-bold mb-4">
+          <h2 className="text-white text-xl sm:text-2xl font-bold mb-2">
             大学生のためのサウナ検索サイト
           </h2>
           <div className="bg-white bg-opacity-0 p-4 sm:p-8 rounded-lg shadow-lg">
