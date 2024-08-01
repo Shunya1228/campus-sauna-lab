@@ -24,7 +24,7 @@
   - プロフィール、アイコン変更
   - メールアドレス、パスワードの変更
 
-<a href="/Users/nagasakishunya/campus-sauna-lab/public/verification email.png">
+ <img src="/verification email.png" alt="Verification Email" />
 
 ## ページの構成
 - Topページ
