@@ -21,7 +21,7 @@
 - Next.js
 - tailwindcss
 - supabase→DB管理、認証機能
-- ZoStand→グローバルな状態管理
+- ZuStand→グローバルな状態管理
 - React Hook Form→フォーム作成
 - Zod→フォームバリデーション
 
