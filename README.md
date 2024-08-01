@@ -17,6 +17,14 @@
         - パスワード（settings/password）
         - ログアウト（settings/logout）
 
+## 使用技術
+- Next.js
+- tailwindcss
+- supabase→DB管理、認証機能
+- ZoStand→グローバルな状態管理
+- React Hook Form→フォーム作成
+- Zod→フォームバリデーション
+
 <h2>アプリケーションを作成した経緯</h2>
 <ul>
 <li>時間に余裕のある大学生の期間により多くのサウナ施設を訪れて欲しいと考えたため</li>
