@@ -19,7 +19,7 @@ export async function addFavoriteFacility(userId: string, facilityId: string): P
     }
 
     //
-    const favoriteFacilities = profileData.favorite_facilities || [];;
+    let favoriteFacilities= profileData.favorite_facilities || [];
 
       //デバック用
     console.log(favoriteFacilities);
@@ -28,6 +28,11 @@ export async function addFavoriteFacility(userId: string, facilityId: string): P
 
     //facilityIdをnumber型に変換
     const facilityIdNumber =  Number(facilityId);
+    console.log(facilityIdNumber);
+
+    if (isNaN(facilityIdNumber)) {
+      throw new Error("facilityIdが無効です。");
+    }
 
     // すでにお気に入りに登録されているか確認
     if (!favoriteFacilities.includes(facilityIdNumber)) {

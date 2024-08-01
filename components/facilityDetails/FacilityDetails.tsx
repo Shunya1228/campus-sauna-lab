@@ -4,7 +4,6 @@ import { supabase } from "@/utils/supabase/supabase";
 import { addFavoriteFacility } from "../favoriteFacility/addFavoriteFacility";
 import useStore from "@/store";
 import { removeFavoriteFacility } from "../favoriteFacility/removeFavoriteFacility";
-import FavoriteIcon from "../favoriteIcon";
 
 interface FacilityDetailsProps {
   id: string;
@@ -15,11 +14,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { user } = useStore();
-  const [on, setOn] = useState(false);
-
-  const handleClick = useCallback(() => {
-    setOn((prev) => !prev);
-  }, []);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
     async function fetchTask() {
@@ -59,6 +54,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 
   //お気に入り登録の処理を実行して、メッセージを表示する
   const handleAddFavorite = async () => {
+    
     if (user?.id && id) {
       const response = await addFavoriteFacility(user.id, id);
       alert(response.message); // メッセージをアラートで表示
@@ -74,6 +70,15 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
       alert(response.message); // メッセージをアラートで表示
     } else {
       alert("ログインをしてから実行してください。");
+    }
+  };
+
+  const handleClick = () => {
+    setIsFavorited(!isFavorited);
+    if (isFavorited) {
+      handleRemoveFavorite();
+    } else {
+      handleAddFavorite();
     }
   };
 
@@ -112,7 +117,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
               <div className="font-bold">アクセス</div>
               <div>{task.access}</div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4 border-b py-2">
               <div className="font-bold">料金（最低価格）</div>
               <div>{task.fee}円</div>
@@ -135,14 +140,37 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 
             <div className="grid grid-cols-2 gap-4 border-b py-2">
               <div className="font-bold">公式HP</div>
-              <div><a href={task.HP} className="text-blue-600 hover:underline text-xs break-words">
-              {task.HP}
-              </a></div>
+              <div>
+                <a
+                  href={task.HP}
+                  className="text-blue-600 hover:underline text-xs break-words"
+                >
+                  {task.HP}
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="p-4">
-          <FavoriteIcon />
+          <div className="flex items-center justify-center">
+            <button
+              variant="ghost"
+              size="icon"
+              onClick={handleClick}
+              className={`
+        rounded-full
+        transition-transform
+        duration-200
+        ease-in-out
+        hover:scale-125
+        ${isFavorited ? "bg-red-500 text-white" : "bg-white text-red-500"}
+        text-center
+      `}
+            >
+              <HeartIcon className="h-7 w-7" />
+              <span className="sr-only">
+                {isFavorited ? "Remove from favorites" : "Add to favorites"}
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -151,3 +179,22 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 };
 
 export default FacilityDetails;
+
+function HeartIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </svg>
+  );
+}

@@ -7,15 +7,15 @@
 </p>
 
 ## ページの構成
-    - Topページ
-    - Mapページ（/map）
-    - 施設詳細ページ（details/[id]）
-    - MyMapページ（/mymap）
-    - プロフィールページ（settings/〇〇）
-        - プロフィール（settings/profile）
-        - メールアドレス（settings/email）
-        - パスワード（settings/password）
-        - ログアウト（settings/logout）
+  - Topページ
+  - Mapページ（/map）
+  - 施設詳細ページ（details/[id]）
+  - MyMapページ（/mymap）
+  - プロフィールページ（settings/〇〇）
+      - プロフィール（settings/profile）
+      - メールアドレス（settings/email）
+      - パスワード（settings/password）
+      - ログアウト（settings/logout）
 
 ## 使用技術
 - Next.js
