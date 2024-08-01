@@ -19,6 +19,7 @@
 
 ## 使用技術
 - Next.js
+- TypeScript（実装中）
 - tailwindcss
 - supabase→DB管理、認証機能
 - ZuStand→グローバルな状態管理
