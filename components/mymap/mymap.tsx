@@ -20,6 +20,14 @@ const FavoriteFacilitiesMap: React.FC<FavoriteFacilitiesMapProps> = ({
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const router = useRouter();
 
+  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  //、環境変数が確実に存在することを保証するためのエラーハンドリング
+  if (!googleMapsApiKey) {
+    console.error('Google Maps API key is missing');
+    throw new Error('Google Maps API key is required');
+  }
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -77,9 +85,7 @@ const FavoriteFacilitiesMap: React.FC<FavoriteFacilitiesMapProps> = ({
       <h1 className="text-center text-2xl font-bold mb-4">My Map</h1>
       <p className="text-sm text-center mb-2">※お気に入り登録した施設が表示されています。</p>
       <div className="rounded-lg overflow-hidden shadow-lg">
-      <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-      >
+      <LoadScript googleMapsApiKey={googleMapsApiKey}> 
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}

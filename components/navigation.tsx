@@ -26,6 +26,7 @@ const Navigation = ({
       name: session && profile ? profile.name : "",
       introduce: session && profile ? profile.introduce : "",
       avatar_url: session && profile ? profile.avatar_url : "",
+      favorite_facilities: session && profile ? profile.favorite_facilities : "",
     });
   }, [session, setUser, profile]);
 

@@ -6,17 +6,10 @@ import { getUniversities } from "@/components/GetUniversity";
 import FacilityList from "../FacilityList";
 import { getFacility } from "@/components/GetFacility";
 import useStore from "@/store";
+import { Facility } from "@/types/supabasetype";
 
 interface University {
   name: string;
-  lat: number;
-  lng: number;
-}
-
-interface Facility {
-  id: number;
-  name: string;
-  category: string;
   lat: number;
   lng: number;
 }
@@ -33,7 +26,13 @@ const SearchByUniversity: React.FC = () => {
     Facility | undefined
   >(undefined);
 
-  console.log("テスト");
+  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  //、環境変数が確実に存在することを保証するためのエラーハンドリング
+  if (!googleMapsApiKey) {
+    console.error('Google Maps API key is missing');
+    throw new Error('Google Maps API key is required');
+  }
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -56,7 +55,7 @@ const SearchByUniversity: React.FC = () => {
         handleCurrentLocation();
       }
 
-      const facilitiesData = await getFacility();
+      const facilitiesData: Facility[] = await getFacility();
       setFacilities(facilitiesData);
     };
 
@@ -149,14 +148,11 @@ const SearchByUniversity: React.FC = () => {
           ))}
         </select>
       </div>
-      <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-      >
+      <LoadScript googleMapsApiKey={googleMapsApiKey}> 
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
           zoom={14}
-          className="rounded-lg shadow-md"
         >
           <Marker
             position={center}
@@ -164,8 +160,7 @@ const SearchByUniversity: React.FC = () => {
               url: selectedUniversity
                 ? "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg"
                 : "http://maps.google.com/mapfiles/ms/micons/man.png",
-              scaledSize: { width: 40, height: 40 },
-              optimized: false,
+                scaledSize: { width: 40, height: 40 }, 
             }}
           />
 
@@ -175,8 +170,7 @@ const SearchByUniversity: React.FC = () => {
               position={{ lat: facility.lat, lng: facility.lng }}
               icon={{
                 url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                scaledSize: { width: 40, height: 40 },
-                optimized: false,
+                scaledSize: { width: 40, height: 40 }, 
               }}
               onClick={() => handleMarkerClick(facility.id)}
             />

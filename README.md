@@ -24,8 +24,6 @@
   - プロフィール、アイコン変更
   - メールアドレス、パスワードの変更
 
- <img src="/verification email.png" alt="Verification Email" />
-
 ## ページの構成
 - Topページ
 - Mapページ（/map）

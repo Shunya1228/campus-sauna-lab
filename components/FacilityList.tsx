@@ -5,15 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/supabase";
 import { getFacility } from "@/components/GetFacility";
 import { getDistance } from 'geolib';
-
-interface Facility {
-  id: number;
-  name: string;
-  lat: number;
-  lng: number;
-  fee: number;
-  openinghours: string;
-}
+import { Facility } from "@/types/supabasetype";
 
 interface FacilityListProps {
   selectedFacility?: Facility; // 選択された施設情報を受け取る
@@ -51,19 +43,12 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
         // 各施設の画像URLを取得
         const imageUrls = await Promise.all(
           facilitiesData.map(async (facility) => {
-            const { data, error } = await supabase.storage
+            const { data } = await supabase.storage
               .from("saunaapp") // バケット名
               .getPublicUrl(`main/${facility.id}.jpg`); // メイン画像のパス
 
-            if (error) {
-              console.error(
-                `Error fetching image for facility ${facility.id}:`,
-                error.message
-              );
-              return { [facility.id]: "" };
-            } else {
-              return { [facility.id]: data.publicUrl || "" };
-            }
+            // data.publicUrlが存在する場合のみ設定
+            return { [facility.id]: data.publicUrl || "" };
           })
         );
         setImageUrls(Object.assign({}, ...imageUrls));
@@ -80,21 +65,15 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
     const fetchImageUrl = async () => {
       if (selectedFacility) {
         try {
-          const { data, error } = await supabase.storage
+          const { data} = await supabase.storage
             .from("saunaapp") // バケット名
             .getPublicUrl(`main/${selectedFacility.id}.jpg`); // メイン画像のパス
 
-          if (error) {
-            console.error(
-              `Error fetching image for facility ${selectedFacility.id}:`,
-              error.message
-            );
-          } else {
-            setImageUrls((prevState) => ({
-              ...prevState,
-              [selectedFacility.id]: data.publicUrl || "",
-            }));
-          }
+          // data.publicUrlが存在する場合のみ設定
+          setImageUrls((prevState) => ({
+            ...prevState,
+            [selectedFacility.id]: data.publicUrl || "",
+          }));
         } catch (error) {
           console.error("Error fetching image:", error);
         }

@@ -62,6 +62,25 @@ export type Database = {
   };
 };
 
+export interface Facility {
+  id: number;
+  name: string;
+  category: string;
+  lat: number;
+  lng: number;
+  fee: string;           
+  openinghours: string; 
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  introduce: string;
+  avatar_url: string;
+  favorite_facilities: string; 
+}
+
 type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<

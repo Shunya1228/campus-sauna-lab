@@ -1,4 +1,5 @@
 import { supabase } from "@/utils/supabase/supabase";
+import { Facility } from "@/types/supabasetype";
 
 export const getFacility = async () => {
   const { data, error } = await supabase
@@ -17,7 +18,7 @@ export const getFacility = async () => {
     lng: facility.longitude,
     fee: facility.fee,
     openinghours: facility.openinghours,
-  }));
+  }))as Facility[];
 };
 
 export default getFacility;
