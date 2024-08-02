@@ -5,7 +5,7 @@ interface MappageProps {
   university?: string;
 }
 
-const Mappage: React.FC<MappageProps> = ({ university }) => {
+const Mappage: React.FC<MappageProps> = () => {
   return (
     <div>
       <SearchByUniversity />
