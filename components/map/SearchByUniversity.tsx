@@ -115,7 +115,7 @@ const SearchByUniversity: React.FC = () => {
 
   const mapContainerStyle = {
     width: "100%",
-    height: "400px",
+    height: 'calc(100vh - 100px)',  // 画面全体から余白を引いた高さ
   };
 
   const center =
@@ -128,7 +128,7 @@ const SearchByUniversity: React.FC = () => {
 
   return (
     <div className="px-4 py-3">
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex gap-2 justify-center">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
           onClick={handleCurrentLocation}
@@ -148,6 +148,8 @@ const SearchByUniversity: React.FC = () => {
           ))}
         </select>
       </div>
+      
+      <div className="relative h-[calc(100vh-100px)]">
       <LoadScript googleMapsApiKey={googleMapsApiKey}> 
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
@@ -173,7 +175,7 @@ const SearchByUniversity: React.FC = () => {
           ))}
         </GoogleMap>
       </LoadScript>
-
+      </div>
       <FacilityList selectedFacility={selectedFacility} center={center} />
     </div>
   );
