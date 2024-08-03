@@ -40,7 +40,7 @@ const SupabaseListener = async () => {
     }
   }
 
-  return <Navigation session={session} profile={profile} />
+  return <Navigation session={session} profile={profile} /> 
 }
 
 export default SupabaseListener

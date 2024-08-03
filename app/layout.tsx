@@ -8,8 +8,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Campus Sauna Lab",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Campus Sauna Lab ~大学生のためのサウナ検索サイト~",
+  description: "大学生向けのサウナ検索サイト。地図で大学付近のサウナ施設を検索!MyMap機能でお気に入り登録も!",
 };
 
 export default function RootLayout({
@@ -25,13 +25,14 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content={metadata.description} />
         <title>{metadata.title}</title>
+        <link rel="icon" href="favicon.jpg" />
       </head>
       <body className="flex flex-col min-h-screen bg-background text-foreground">
       <SupabaseListener />
           <main className="flex-grow">
             {children}
-            <Footer />
           </main>
+      <Footer />
         </body>
     </html>
   );
