@@ -6,10 +6,9 @@ import useStore from '@/store'
 interface UniversityModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSearch: (university: string) => void;
 }
 
-const UniversityModal: React.FC<UniversityModalProps> = ({ isOpen, onClose, onSearch }) => {
+const UniversityModal: React.FC<UniversityModalProps> = ({ isOpen, onClose }) => {
   const [universities, setUniversities] = useState<string[]>([]);
   const { selectedUniversity, setSelectedUniversity } = useStore()
   const router = useRouter();

@@ -96,8 +96,6 @@ const FavoriteFacilitiesMap: React.FC<FavoriteFacilitiesMapProps> = ({
             position={center}
             icon={{
               url: "http://maps.google.com/mapfiles/ms/micons/man.png",
-              scaledSize: { width: 40, height: 40 },
-              optimized: false,
             }}
           />
           {favoriteFacilities.map((facility) => (

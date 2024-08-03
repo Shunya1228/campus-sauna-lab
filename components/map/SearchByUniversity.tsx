@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, LoadScript} from "@react-google-maps/api";
 import { getUniversities } from "@/components/GetUniversity";
 import FacilityList from "../FacilityList";
 import { getFacility } from "@/components/GetFacility";
@@ -28,7 +28,7 @@ const SearchByUniversity: React.FC = () => {
 
   const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-  //、環境変数が確実に存在することを保証するためのエラーハンドリング
+  // 環境変数が確実に存在することを保証するためのエラーハンドリング
   if (!googleMapsApiKey) {
     console.error('Google Maps API key is missing');
     throw new Error('Google Maps API key is required');
@@ -157,10 +157,7 @@ const SearchByUniversity: React.FC = () => {
           <Marker
             position={center}
             icon={{
-              url: selectedUniversity
-                ? "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg"
-                : "http://maps.google.com/mapfiles/ms/micons/man.png",
-                scaledSize: { width: 40, height: 40 }, 
+              url: "http://maps.google.com/mapfiles/ms/micons/man.png",
             }}
           />
 
@@ -170,7 +167,6 @@ const SearchByUniversity: React.FC = () => {
               position={{ lat: facility.lat, lng: facility.lng }}
               icon={{
                 url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                scaledSize: { width: 40, height: 40 }, 
               }}
               onClick={() => handleMarkerClick(facility.id)}
             />

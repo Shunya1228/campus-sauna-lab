@@ -1,11 +1,7 @@
 import React from "react";
 import SearchByUniversity from "../../components/map/SearchByUniversity";
 
-interface MappageProps {
-  university?: string;
-}
-
-const Mappage: React.FC<MappageProps> = () => {
+const Mappage: React.FC = () => {
   return (
     <div>
       <SearchByUniversity />

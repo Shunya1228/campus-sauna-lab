@@ -13,20 +13,12 @@ const TopMainVisual = () => {
 
   // 画像の取得
   const fetchImage = async () => {
-    try {
-      const { data, error } = await supabase.storage
-        .from("saunaapp") // バケット名
-        .getPublicUrl(`Top/TopVisual2.jpg`); // idからメイン画像を取得
+    const { data } = supabase.storage
+      .from("saunaapp") // バケット名
+      .getPublicUrl(`Top/TopVisual2.jpg`); // idからメイン画像を取得
 
-      if (error) {
-        throw error;
-      }
-
-      // 公開URLを設定
-      setImageUrl(data.publicUrl);
-    } catch (error) {
-      console.error("Error fetching image:", error.message);
-    }
+    // 公開URLを設定
+    setImageUrl(data.publicUrl);
   };
 
   // コンポーネントのマウント時に画像を取得

@@ -83,7 +83,8 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
     fetchImageUrl();
   }, [selectedFacility]);
 
-  const handleClick = (facilityId: number) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const facilityId = Number(event.currentTarget.dataset.facilityId);
     if (selectedFacility) {
       router.push(`/details/${selectedFacility.id}`);
     } else {
@@ -131,7 +132,7 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
                 />
               )}
               <div className="flex-grow">
-                <button className="text-left block cursor-pointer" onClick={() => handleClick(facility.id)}>
+                <button className="text-left block cursor-pointer" onClick={handleClick} data-facility-id={facility.id} > 
                   <div className="text-sm">{facility.name}</div>
                   <div className="text-xs text-gray-500">
                     料金: {facility.fee}円 | 営業時間: {facility.openinghours}

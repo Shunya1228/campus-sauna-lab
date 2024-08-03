@@ -5,7 +5,7 @@ import MyMap from "../../components/mymap/mymap";
 
 import type { Database } from "@/types/supabasetype";
 
-const MyMapPage = async () => {
+export default async function MyMapPage() {
   const supabase = createServerComponentClient<Database>({
     cookies,
   });
@@ -23,6 +23,4 @@ const MyMapPage = async () => {
   const userId = session.user.id;
 
   return <MyMap userId={userId} />;
-};
-
-export default MyMapPage;
+}
