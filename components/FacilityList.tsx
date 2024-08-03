@@ -135,7 +135,7 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
                 <button className="text-left block cursor-pointer" onClick={handleClick} data-facility-id={facility.id} > 
                   <div className="text-sm">{facility.name}</div>
                   <div className="text-xs text-gray-500">
-                    料金: {facility.fee}円 | 営業時間: {facility.openinghours}
+                    料金: {facility.fee} | 営業時間: {facility.openinghours}
                   </div>
                 </button>
               </div>

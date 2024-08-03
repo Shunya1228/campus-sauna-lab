@@ -117,7 +117,7 @@ const FacilityDetails: React.FC<FacilityDetailsProps> = ({ id }) => {
 
             <div className="grid grid-cols-2 gap-4 border-b py-2">
               <div className="font-bold">料金（最低価格）</div>
-              <div>{task.fee}円</div>
+              <div>{task.fee}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 border-b py-2">

@@ -148,13 +148,15 @@ const SearchByUniversity: React.FC = () => {
           ))}
         </select>
       </div>
+
+      <p className="text-sm text-center mb-2">※施設のピンを押すと下のリストが変化します。</p>
       
       <div className="relative h-[calc(100vh-100px)]">
       <LoadScript googleMapsApiKey={googleMapsApiKey}> 
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
-          zoom={14}
+          zoom={12}
         >
           <Marker
             position={center}
