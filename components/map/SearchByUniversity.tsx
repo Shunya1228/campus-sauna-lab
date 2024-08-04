@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { GoogleMap, Marker, LoadScript} from "@react-google-maps/api";
+import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 import { getUniversities } from "@/components/GetUniversity";
 import FacilityList from "../FacilityList";
 import { getFacility } from "@/components/GetFacility";
@@ -30,8 +30,8 @@ const SearchByUniversity: React.FC = () => {
 
   // 環境変数が確実に存在することを保証するためのエラーハンドリング
   if (!googleMapsApiKey) {
-    console.error('Google Maps API key is missing');
-    throw new Error('Google Maps API key is required');
+    console.error("Google Maps API key is missing");
+    throw new Error("Google Maps API key is required");
   }
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const SearchByUniversity: React.FC = () => {
 
   const mapContainerStyle = {
     width: "100%",
-    height: 'calc(100vh - 100px)',  // 画面全体から余白を引いた高さ
+    height: "calc(100vh - 100px)", // 画面全体から余白を引いた高さ
   };
 
   const center =
@@ -149,34 +149,36 @@ const SearchByUniversity: React.FC = () => {
         </select>
       </div>
 
-      <p className="text-sm text-center mb-2">※施設のピンを押すと下のリストが変化します。</p>
-      
-      <div className="relative h-[calc(100vh-100px)]">
-      <LoadScript googleMapsApiKey={googleMapsApiKey}> 
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={center}
-          zoom={12}
-        >
-          <Marker
-            position={center}
-            icon={{
-              url: "http://maps.google.com/mapfiles/ms/micons/man.png",
-            }}
-          />
+      <p className="text-sm text-center mb-2">
+        ※施設のピンを押すと下のリストが変化します。
+      </p>
 
-          {facilities.map((facility) => (
+      <div className="relative h-[calc(100vh-100px)]">
+        <LoadScript googleMapsApiKey={googleMapsApiKey}>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={12}
+          >
             <Marker
-              key={facility.id}
-              position={{ lat: facility.lat, lng: facility.lng }}
+              position={center}
               icon={{
-                url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                url: "http://maps.google.com/mapfiles/ms/micons/man.png",
               }}
-              onClick={() => handleMarkerClick(facility.id)}
             />
-          ))}
-        </GoogleMap>
-      </LoadScript>
+
+            {facilities.map((facility) => (
+              <Marker
+                key={facility.id}
+                position={{ lat: facility.lat, lng: facility.lng }}
+                icon={{
+                  url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                }}
+                onClick={() => handleMarkerClick(facility.id)}
+              />
+            ))}
+          </GoogleMap>
+        </LoadScript>
       </div>
       <FacilityList selectedFacility={selectedFacility} center={center} />
     </div>

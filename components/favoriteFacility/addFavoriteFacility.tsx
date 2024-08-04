@@ -18,7 +18,6 @@ export async function addFavoriteFacility(userId: string, facilityId: string): P
       throw profileError || new Error("プロフィールデータが見つかりません。");
     }
 
-    //
     let favoriteFacilities= profileData.favorite_facilities || [];
 
       //デバック用
