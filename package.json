@@ -3,7 +3,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint",
+    "fix": "eslint --fix",
+    "format": "prettier --write"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -41,6 +44,8 @@
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "eslint": "^9.8.0",
+    "prettier": "^3.3.3"
   }
 }
