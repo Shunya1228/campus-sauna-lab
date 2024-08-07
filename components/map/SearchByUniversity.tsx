@@ -115,7 +115,7 @@ const SearchByUniversity: React.FC = () => {
 
   const mapContainerStyle = {
     width: "100%",
-    height: "calc(100vh - 100px)", // 画面全体から余白を引いた高さ
+    height: "400px", // 画面全体から余白を引いた高さ
   };
 
   const center =
@@ -153,7 +153,7 @@ const SearchByUniversity: React.FC = () => {
         ※施設のピンを押すと下のリストが変化します。
       </p>
 
-      <div className="relative h-[calc(100vh-100px)]">
+      <div className="flex flex-col">
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
@@ -179,7 +179,7 @@ const SearchByUniversity: React.FC = () => {
             ))}
           </GoogleMap>
         </LoadScript>
-      </div>
+            </div>
       <FacilityList selectedFacility={selectedFacility} center={center} />
     </div>
   );

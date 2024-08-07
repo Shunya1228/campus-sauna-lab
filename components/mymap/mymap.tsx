@@ -48,7 +48,7 @@ const FavoriteFacilitiesMap: React.FC<FavoriteFacilitiesMapProps> = ({
 
   const mapContainerStyle = {
     width: "100%",
-    height: "400px",
+    height: "700px",
   };
 
   const center = {
