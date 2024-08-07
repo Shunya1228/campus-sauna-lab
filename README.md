@@ -3,7 +3,8 @@
 </a>
 
 <p align="center">
- 地図表示を中心として、現在地や大学周辺のサウナ施設を調べることができるアプリケーション
+ 地図表示を中心として、現在地や大学周辺のサウナ施設を調べることができるアプリケーション</br>
+ ログインすることでMyMapを作成し、お気に入りの施設をコレクションすることが可能
 </p>
 
 ## デプロイ先
@@ -19,6 +20,9 @@ https://campus-sauna-lab.vercel.app
 - Google Map API✖️supabaseのDBを利用、地図上のマーカーをクリックすると下の施設リスト表示が変化する
 - v0を活用したAIのUIコンポーネントを利用（お気に入り登録ボタン）
 - 一部TypeScriptを使用した型定義
+
+## 制作期間
+- 1ヶ月程
 
 ## ターゲット
 - サウナに定期的に通っている大学生、大学生コミュニティ
@@ -53,13 +57,21 @@ https://campus-sauna-lab.vercel.app
 - Next.js
 - TypeScript（実装中）
 - tailwindcss
-- supabase→DB管理、画像管理、認証機能
-- ZuStand→グローバルな状態管理
-- React Hook Form→フォーム作成
-- Zod→フォームバリデーション
-- Google Map API→地図表示
-- ESlint→静的解析
-- Prettier→コード整形
+  - CSS
+- supabase
+  - DB管理、画像管理、認証機能
+- ZuStand
+  - グローバルな状態管理
+- React Hook Form
+  - フォーム作成
+- Zod
+  - フォームバリデーション
+- Google Map API
+  - 地図表示
+- ESlint
+  -  静的解析
+- Prettier
+  - コード整形
 
 ## 今後の展望
 - レビュー投稿機能の実装
