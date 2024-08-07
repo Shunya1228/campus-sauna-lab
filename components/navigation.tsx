@@ -33,7 +33,7 @@ const Navigation = ({
   return (
     <header className="shadow-lg shadow-gray-100 bg-gray-800 text-white p-2">
       <div className="py-2 container max-w-screen-sm mx-auto flex items-center justify-between">
-        <Link href="/" className="font-bold text-xl cursor-pointer">
+        <Link href="/" className="font-bold text-lg cursor-pointer">
           Campus Sauna Lab
         </Link>
 
@@ -58,7 +58,7 @@ const Navigation = ({
           ) : (
             <div className="flex items-center space-x-5">
               <Link href="/auth/login">ログイン</Link>
-              <Link href="/auth/signup">サインアップ</Link>
+              <Link href="/auth/signup" className="bg-blue-500 text-white px-2 py-2 rounded">サインアップ</Link>
             </div>
           )}
         </div>
