@@ -6,6 +6,7 @@ import { supabase } from "@/utils/supabase/supabase";
 import { getFacility } from "@/components/GetFacility";
 import { getDistance } from 'geolib';
 import { Facility } from "@/types/supabasetype";
+import Link from 'next/link';
 
 interface FacilityListProps {
   selectedFacility?: Facility; // 選択された施設情報を受け取る
@@ -96,7 +97,8 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
     <div className="mt-4">
       {/* 施設が選択されているとき */}
       {selectedFacility && (
-        <div className="py-2 flex items-center justify-center">
+        <div className="py-4 flex items-center justify-center bg-white shadow-sm rounded-lg hover:bg-gray-100 transition duration-200">
+        <button className="flex items-center text-left cursor-pointer p-4" onClick={handleClick}>
           {imageUrls[selectedFacility.id] && (
             <img
               src={imageUrls[selectedFacility.id]}
@@ -104,26 +106,25 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
               className="w-16 h-16 object-cover rounded-full mr-4"
             />
           )}
-          <div className="flex-grow">
-            <button
-              className="text-left block cursor-pointer"
-              onClick={handleClick}
-            >
-              <div className="text-sm">{selectedFacility.name}</div>
-              <div className="text-xs text-gray-500">
-                料金: {selectedFacility.fee}円 | 営業時間:{" "}
-                {selectedFacility.openinghours}
-              </div>
-            </button>
+          <div>
+            <h3 className="text-lg font-semibold">{selectedFacility.name}</h3>
+            <p className="text-sm text-gray-500 mt-1">
+              料金: {selectedFacility.fee}円 | 営業時間: {selectedFacility.openinghours}
+            </p>
           </div>
-        </div>
+        </button>
+      </div>
       )}
 
       {/* 施設が選択されていないとき */}
       {!selectedFacility && (
         <ul className="divide-y divide-gray-200">
-          {facilities.map((facility) => (
-            <li key={facility.id} className="py-2 flex items-center justify-center">
+        {facilities.map((facility) => (
+          <li key={facility.id} className="py-4">
+            <Link
+              href={`/details/${facility.id}`}
+              className="flex items-center p-4 hover:bg-gray-100 rounded-lg transition duration-200"
+            >
               {imageUrls[facility.id] && (
                 <img
                   src={imageUrls[facility.id]}
@@ -132,16 +133,15 @@ const FacilityListContainer: React.FC<FacilityListProps> = ({
                 />
               )}
               <div className="flex-grow">
-                <button className="text-left block cursor-pointer" onClick={handleClick} data-facility-id={facility.id} > 
-                  <div className="text-sm">{facility.name}</div>
-                  <div className="text-xs text-gray-500">
-                    料金: {facility.fee} | 営業時間: {facility.openinghours}
-                  </div>
-                </button>
+                <h3 className="text-lg font-semibold">{facility.name}</h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  料金: {facility.fee} | 営業時間: {facility.openinghours}
+                </p>
               </div>
-            </li>
-          ))}
-        </ul>
+            </Link>
+          </li>
+        ))}
+      </ul>
       )}
     </div>
   );
