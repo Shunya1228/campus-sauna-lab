@@ -9,7 +9,7 @@ export const serviceDescription = () => {
           <div className="mt-6">
             <img
               src="mapScreen.png"
-              alt="Campus Sauna Lab"
+              alt="Campus Sauna Labマップ画面"
               className="w-full h-auto object-cover rounded-lg mb-4 max-w-md"
             />
           </div>
@@ -36,7 +36,7 @@ export const serviceDescription = () => {
           <div className="mt-6">
             <img
               src="MyMap.jpg"
-              alt="Campus Sauna Lab"
+              alt="Campus Sauna Labお気に入り登録機能"
               className="w-full h-auto object-cover rounded-lg mb-4 max-w-md"
             />
           </div>

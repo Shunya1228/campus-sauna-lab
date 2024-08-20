@@ -26,10 +26,10 @@ const TopMainVisual = () => {
 
   return (
     <div className="relative h-full">
-      <>
+      <section>
           <img
             src="TopVisual.jpg"
-            alt="Image"
+            alt="Campus Sauna Lab メインビジュアル"
             className="w-full h-screen object-cover"
           />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center px-2">
@@ -58,7 +58,7 @@ const TopMainVisual = () => {
         </div>
         {/* モーダルの表示 */}
         <UniversityModal isOpen={isModalOpen} onClose={handleCloseModal} />
-      </>
+      </section>
     </div>
   );
 };
