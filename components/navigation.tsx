@@ -56,10 +56,10 @@ const Navigation = ({
               </Link>
             </div>
           ) : (
-            <div className="flex items-center space-x-5">
+            <nav className="flex items-center space-x-5">
               <Link href="/auth/login">ログイン</Link>
               <Link href="/auth/signup" className="bg-blue-500 text-white px-2 py-2 rounded">サインアップ</Link>
-            </div>
+            </nav>
           )}
         </div>
       </div>

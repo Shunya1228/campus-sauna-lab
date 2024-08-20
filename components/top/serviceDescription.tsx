@@ -3,7 +3,7 @@ import React from "react";
 export const serviceDescription = () => {
   return (
     <div>
-      <div className="p-6 bg-gray-900 shadow-lg mx-auto text-white">
+      <section className="p-6 bg-gray-900 shadow-lg mx-auto text-white">
         {/* 特徴 */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-center">
           <div className="mt-6">
@@ -29,8 +29,8 @@ export const serviceDescription = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="p-6 bg-gray-900 shadow-lg mx-auto text-white">
+      </section>
+      <section className="p-6 bg-gray-900 shadow-lg mx-auto text-white">
         {/* MyMap説明 */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-center">
           <div className="mt-6">
@@ -57,7 +57,7 @@ export const serviceDescription = () => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
